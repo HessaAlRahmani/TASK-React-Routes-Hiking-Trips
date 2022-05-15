@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
-import tripsData from '../tripsData';
-import SearchBar from './SearchBar';
-import TripItem from './TripItem';
-
+import React, { useState } from "react";
+import tripsData from "../tripsData";
+import SearchBar from "./SearchBar";
+import TripItem from "./TripItem";
+import { useSearchParams } from "react-router-dom";
 function TripsList() {
-  const [query, setQuery] = useState('');
+  const [query1, setQuery1] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams({ query: "" });
   const trips = tripsData
-    .filter((trip) => trip.name.toLowerCase().includes(query.toLowerCase()))
+    .filter(
+      (trip) =>
+        trip.name.toLowerCase().includes(query1.toLowerCase()) &&
+        trip.difficulty.includes(searchParams.get("query"))
+    )
     .map((trip) => <TripItem trip={trip} />);
+
   return (
     <section className="page-section portfolio" id="portfolio">
       <div className="container">
@@ -15,11 +21,26 @@ function TripsList() {
           Explore Trips
         </h2>
         <br />
-        <SearchBar setQuery={setQuery} />
+        <SearchBar setQuery={setQuery1} />
         <center>
-          <button className="btn btn-primary btn-xl">Easy</button>
-          <button className="btn btn-primary btn-xl">Moderate</button>
-          <button className="btn btn-primary btn-xl">Hard</button>
+          <button
+            className="btn btn-primary btn-xl"
+            onClick={() => setSearchParams({ query: "easy" })}
+          >
+            Easy
+          </button>
+          <button
+            className="btn btn-primary btn-xl"
+            onClick={() => setSearchParams({ query: "moderate" })}
+          >
+            Moderate
+          </button>
+          <button
+            className="btn btn-primary btn-xl"
+            onClick={() => setSearchParams({ query: "hard" })}
+          >
+            Hard
+          </button>
         </center>
         <div className="divider-custom">
           <div className="divider-custom-line"></div>
